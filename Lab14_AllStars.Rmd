@@ -255,7 +255,7 @@ New Graph:
 ```{r, message = FALSE, warning=FALSE, fig.align='center'} 
 ggplot(data = babies) + 
   geom_point(mapping=aes(x = mpregwt, y = bwtoz)) +
-  geom_abline(intercept = 99.3510, slope = 0.1505, color = "blue")
+  geom_abline(intercept = 99.3510, slope = 0.1505, color = "blue") + labs(x = "Mother's Pre-Pregnancy Weight in Pounds", y = "Birth Weight in Oz")
 ```
 By fitting a linear model to the data, it mostly supports my initial analysis because while it shows there could be a slight upward trend, the correlation is very small.
 
