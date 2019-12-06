@@ -426,12 +426,11 @@ perm_mean &lt;- function(perms = 1000, all_values, n_A)
 perm_babies &lt;- perm_mean(1000, data_babies$Premature, 484)
 
 p_babies &lt;- 1 - sum(perm_babies &lt; mu_prem)/1000</code></pre>
-<p>The p value of 0.035 indicates that we should reject the null hypothesis and instead conclude that there is a difference between premature birth rate in smoking and nonsmoking mothers.</p>
+<p>The p value of 0.05 indicates that we should reject the null hypothesis and instead conclude that there is a difference between premature birth rate in smoking and nonsmoking mothers.</p>
 </div>
 <div id="conclusions" class="section level2">
 <h2>Conclusions</h2>
 <p>Do mothers who smoke have increased rates of premature delivery (before 270 days)? Our conclusion this time matched with our results when we initially did the lab (that there is a difference in premature birth rates in smoking and non-smoking mothers). For this lab, we used a permutation test to test the hypothesis.</p>
-<p>Do the newborns of mothers who smoke have smaller birth weights at every gestational age (number of days into pregnancy when child is born)?</p>
 <hr />
 </div>
 <div id="individual-sections" class="section level2">
@@ -485,7 +484,7 @@ perm_mean &lt;- function(perms = 1000, all_values, n_A)
 
 baby_perms &lt;- perm_mean(1000, nababies$parity, 484)
 p_value &lt;- 1 - sum(baby_perms &lt; mu)/1000</code></pre>
-<p>With a p value of 0.644 the null hypothesis is not rejected. That is to say, there is not statistical evidence that the difference in parities between smoking and nonsmoking mothers didnt occur by chance.</p>
+<p>With a p value of 0.688 the null hypothesis is not rejected. That is to say, there is not statistical evidence that the difference in parities between smoking and nonsmoking mothers didnt occur by chance.</p>
 </div>
 <div id="emily-archambault" class="section level3">
 <h3>Emily Archambault</h3>

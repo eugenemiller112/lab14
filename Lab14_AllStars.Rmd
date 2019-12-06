@@ -91,8 +91,6 @@ The p value of `r p_babies` indicates that we should reject the null hypothesis 
 Do mothers who smoke have increased rates of premature delivery (before 270 days)?
 Our conclusion this time matched with our results when we initially did the lab (that there is a difference in premature birth rates in smoking and non-smoking mothers). For this lab, we used a permutation test to test the hypothesis.
 
-Do the newborns of mothers who smoke have smaller birth weights at every gestational age (number of days into pregnancy when child is born)?
-
 ---
 
 ## Individual Sections
