@@ -223,6 +223,9 @@ Findings: My plot shows the number of people who is premature or full term in di
 
 ### Johnny Tamanaha
 Subquestion: Is birth weight affected by weather or not a mother has a college degree?
+
+This question is important because knowing a correlation between mother's education and birth weight could add to the importance of school for everyone.
+
 ```{r}
 ggplot(subset(babies, med!="NA")) +
   geom_boxplot(mapping=aes(x=med==1, y=bwtoz, fill=med==1), outlier.color="Red", outlier.shape=1) +
@@ -235,6 +238,29 @@ ggplot(subset(babies, med!="NA")) +
 ```
 
 Findings: The data shows no significant difference for higher average birth weight for mothers who have a college degree vs mothers who don't, but mother's with a college degree have less variance on their baby's birth weight. This is highlighted by how many more outliers their are in the "no degree" boxplot in comparison to the "college degree" one. 
+
+```{r}
+babies1 <- babies %>%
+  mutate(smoke_fct = factor(smoke)) %>%
+  filter(smoke != "NA")
+model <- lm(bwtoz ~ med * smoke_fct, data=babies1)
+grid <- babies1 %>%
+  data_grid(med, smoke_fct) %>%
+  gather_predictions(model)
+ggplot(babies1) +
+  geom_point(aes(med, bwtoz)) +
+  geom_point(data=grid, aes(med, pred, color=smoke_fct), size=4) +
+  scale_color_discrete(name = "Mother Smoke Status", labels=c("Never Smokes", "Smokes Now")) +
+  labs(title="Baby Birth Weight Prediction") +
+  xlab("Mother's Education") +
+  ylab("Birth Weight (oz)") +
+  scale_x_discrete(limits=c("< 12th Grade", "High School Diploma", "Trade School", "Some College", "College Graduate", "Unclear", "Other")) +
+  coord_flip()
+```
+
+I used the linear model function and data_grid to show the points on the graph.
+
+Findings: My graph shows no significant correlation between mother's education and baby birth weight, but it does show a consistent difference between non-smokers and smokers for baby birth weight in each education category. 
 
 ### Jingzhi Zhang
 ```{r, echo=FALSE, messgae=FALSE, error=TRUE,warning=FALSE,fig.align='center'}
@@ -260,7 +286,7 @@ __Emily Archambault__: For my individual section, I created a plot that compared
 
 __Kaiyuan Fan__: For my individual part, I make a plot shows the number of people who is premature or full term in different weight of birth. We can find from the plot, the weight of people who is full term is mostly between 80 to 125. However, the weight of people who is premature is mostly between 95 to 150. Hence, we can conclude that premature will influence birth weight, and premature people will have less weight than people who have full term to born.
 
-__Johnny Tamanaha__: I investigated the differences between smokers and non-smokers for birth weight and gestation. I also answered why the two main questions are important and why those reasons are important. For my individual plot I used a fill aesthetic to differentiate the two boxplots. Outlier color and shape were used to defined to pronounce the outliers. The labs function was used to label the title of the plot. xlab, and ylab were used to properly label the x and y axes. The scale_x_discrete function was used to change the boxplot labels from numbers to categories. The scale_fill_discrete function was used to match the legend labels to the boxplot labels. 
+__Johnny Tamanaha__: I did the plot for baby birthweight separated by mother's education.
 
 __Jngzhi Zhang__: For my individual part, I made a plot that shows the correlation of length of gestation in days and babies birth weight in ounces with smoker and nonsmoker. I used the geom_point, geom_smooth functions and facet_grid functions, and also use color to make points easier to see. I added labels for x and y axes as well as the title. I also used labs to substituted origenal labels of smoke. I also created the plot answering question one, and wrote the conclusions section.
 
