@@ -158,7 +158,7 @@ Findings: My plot shows the number of people who is premature or full term in di
 ### Emily Archambault 
 ```{r, message = FALSE, warning=FALSE, fig.align='center'} 
 ggplot(data = babies, mapping = aes(x = mpregwt, y = bwtoz, color = mpregwt)) + 
-geom_point() + geom_smooth(method = "lm", color = "black", se = FALSE) + 
+geom_point() + geom_smooth(color = "black", se = FALSE) + 
 labs(x = "Mother's Pre-Pregnancy Weight in Pounds", y = "Birth Weight in Oz", title = "Comparison of Mother's Weight and Birth Weight", color = "Mother's Weight") + 
 theme(plot.title=element_text(family="Times"), axis.title.x =element_text(family = "Times"), axis.title.y = element_text(family = "Times"))
 ```
