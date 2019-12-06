@@ -4,6 +4,7 @@ author: "Johnny Tamanaha, Emily Archambault, Eugene Miller, Kaiyuan Fan, Jingzhi
 date: "12/6/2019"
 output: html_document
 ---
+
 ```{r, setup, echo = FALSE, message = FALSE, warning = FALSE}
 library(tidyverse)
 babies <- read_csv("https://raw.githubusercontent.com/ervance1/Sp2018-Data-Science-repo/master/babies2a.dat")
@@ -95,6 +96,50 @@ ggplot(subset(babies,Premature!="NA" & smoke != "NA"), aes(smoke))  +
 
 ```
 
+Statistics:
+
+Null hypothesis: there is no difference in premature birth rate between smoking and nonsmoking mothers. 
+
+```{r, message = F, warning = F}
+data_babies <- babies %>% 
+  filter(Premature!="NA" & smoke != "NA")
+
+smoke_babies <- data_babies %>% 
+  filter(smoke==1)
+nosmoke_babies <- data_babies %>% 
+  filter(smoke==0)
+
+smoke_mean <- mean(smoke_babies$Premature)
+nosmoke_mean <- mean(nosmoke_babies$Premature)
+
+mu_prem <- smoke_mean - nosmoke_mean
+
+perm_mean <- function(perms = 1000, all_values, n_A)
+{
+  mu_vec <- numeric(perms)
+
+  for (i in c(1:perms))
+  {
+    
+    shuffle <- sample(all_values)
+    
+    r_A <- shuffle[1:n_A]
+    r_B <- shuffle[(n_A+1):length(all_values)]
+    
+    delta_mu <- mean(r_A) - mean(r_B)
+    
+    mu_vec[i] <- delta_mu
+  }
+  
+  return(mu_vec)
+}
+
+perm_babies <- perm_mean(1000, data_babies$Premature, 484)
+
+p_babies <- 1 - sum(perm_babies < mu_prem)/1000
+```
+
+The p value of `r p_babies` indicates that we should reject the null hypothesis and instead conclude that there is a difference between premature birth rate in smoking and nonsmoking mothers. 
 
 Question 2:
 
@@ -132,6 +177,9 @@ Our data supports the assertions of the original Surgeon General. There is a cle
 ### Eugene Miller
 Subquestion: Is there a relation between parity (number of mother's previous pregnancies) and smoking status?
 
+This question is important because it could help us determing whether smoking generally results in a higher risk of failed pregnancy.
+
+(Old Section)
 ```{r, message = FALSE, warning = FALSE, fig.align='center'}
 ggplot(subset(babies, Premature != "NA" & smoke != "NA")) + 
   geom_bar(mapping = aes(x = parity, y = ..prop.., fill = smoke == 1), show.legend = FALSE, color = "black") + 
@@ -141,8 +189,52 @@ ggplot(subset(babies, Premature != "NA" & smoke != "NA")) +
   scale_fill_brewer(palette = 3)
 ```
 
-This shows that amongst both full term and premature births, smoking is correlated with a higher average number of previous pregnancies that the mother has had. This suggests that smoking increases the chance of a failed pregnancy; a pregnancy that results in the fetus dying before it is born. Therefore, as smoking is correlated with a higher preportion of failed pregnancies, we recommend to try to reduce the amount of smoking in order to reduce the number of failed pregnancies, which places stress of mothers who are trying to concieve a child.
 
+(New Section)
+Statistics:
+
+Null hypothesis: there is no difference between number of parities between nonsmoking and smoking mothers.
+
+```{r, message = F, warning = F}
+nababies <- babies %>% 
+  filter(!is.na(smoke))
+
+baby1 <- nababies %>% 
+  filter(smoke==1)
+baby2 <- nababies %>% 
+  filter(smoke==0)
+
+smokemean <- mean(baby1$parity)
+nosmokemean <- mean(baby2$parity)
+
+mu <- smokemean - nosmokemean
+
+perm_mean <- function(perms = 1000, all_values, n_A)
+{
+  mu_vec <- numeric(perms)
+
+  for (i in c(1:perms))
+  {
+    
+    shuffle <- sample(all_values)
+    
+    r_A <- shuffle[1:n_A]
+    r_B <- shuffle[(n_A+1):length(all_values)]
+    
+    delta_mu <- mean(r_A) - mean(r_B)
+    
+    mu_vec[i] <- delta_mu
+  }
+  
+  return(mu_vec)
+}
+
+baby_perms <- perm_mean(1000, nababies$parity, 484)
+p_value <- 1 - sum(baby_perms < mu)/1000
+
+```
+
+With a p value of `r p_value` the null hypothesis is not rejected. That is to say, there is not statistical evidence that the difference in parities between smoking and nonsmoking mothers didnt occur by chance.
 
 ### Kaiyuan Fan
 ```{r, message = FALSE, warning=FALSE}
