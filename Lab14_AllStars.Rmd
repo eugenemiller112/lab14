@@ -236,6 +236,30 @@ p_value <- 1 - sum(baby_perms < mu)/1000
 
 With a p value of `r p_value` the null hypothesis is not rejected. That is to say, there is not statistical evidence that the difference in parities between smoking and nonsmoking mothers didnt occur by chance.
 
+### Emily Archambault
+
+Question: Is there a correlation between the pre-pregnancy weight of a mother and the weight of her child?
+This question is important because it could show whether the weight of the mother is a potential hidden variable that could be affecting our analysis of smokers and non-smokers.
+
+Old Graph:
+```{r, message = FALSE, warning=FALSE, fig.align='center'} 
+ggplot(data = babies, mapping = aes(x = mpregwt, y = bwtoz, color = mpregwt)) + 
+geom_point() + geom_smooth(color = "black", se = FALSE) + 
+labs(x = "Mother's Pre-Pregnancy Weight in Pounds", y = "Birth Weight in Oz", title = "Comparison of Mother's Weight and Birth Weight", color = "Mother's Weight") + 
+theme(plot.title=element_text(family="Times"), axis.title.x =element_text(family = "Times"), axis.title.y = element_text(family = "Times"))
+```
+I previously concluded that there didn't seem to be a correlation between the pre-pregnancy weight of a mother and the weight of her child.
+
+New Graph:
+
+```{r, message = FALSE, warning=FALSE, fig.align='center'} 
+ggplot(data = babies) + 
+  geom_point(mapping=aes(x = mpregwt, y = bwtoz)) +
+  geom_abline(intercept = 99.3510, slope = 0.1505, color = "blue")
+```
+By fitting a linear model to the data, it mostly supports my initial analysis because while it shows there could be a slight upward trend, the correlation is very small.
+
+
 ### Kaiyuan Fan
 ```{r, message = FALSE, warning=FALSE}
 ggplot(subset(babies,Premature!="NA"), aes(bwtoz))+ 
@@ -247,14 +271,7 @@ ggplot(subset(babies,Premature!="NA"), aes(bwtoz))+
 
 Findings: My plot shows the number of people who is premature or full term in different weight of birth. We can find from the plot, the weight of people who is full term is mostly between 80 to 125. However, the weight of people who is premature is mostly between 95 to 150. Hence, we can conclude that premature will influence birth weight, and premature people will have less weight than people who have full term to born.
 
-### Emily Archambault 
-```{r, message = FALSE, warning=FALSE, fig.align='center'} 
-ggplot(data = babies, mapping = aes(x = mpregwt, y = bwtoz, color = mpregwt)) + 
-geom_point() + geom_smooth(color = "black", se = FALSE) + 
-labs(x = "Mother's Pre-Pregnancy Weight in Pounds", y = "Birth Weight in Oz", title = "Comparison of Mother's Weight and Birth Weight", color = "Mother's Weight") + 
-theme(plot.title=element_text(family="Times"), axis.title.x =element_text(family = "Times"), axis.title.y = element_text(family = "Times"))
-```
-I attempted to answer the question of whethere there is a correlation between the pre-pregnancy weight of a mother and the weight of her child. This graph shows that there is virtually no correlation between the pre-pregnancy weight of a mother and the weight of her child when it is born. With this is mind, we know that the mother's weight is not a hidden variable that could possibly be affecting our analysis of smokers and non-smokers.
+
 
 ### Johnny Tamanaha
 Subquestion: Is birth weight affected by weather or not a mother has a college degree?
