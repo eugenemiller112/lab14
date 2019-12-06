@@ -283,7 +283,7 @@ This graph shows that in the same level of birth weight in ounce, smokers have s
 
 __Eugene Miller__ : I created the plot answering question 2, and plots correlating income and premature births between smoker and non smokers. In the team plot I used a combination of geom_point and geom_smooth to show the differences between birth weight of smoking and nonsmoing children, across all gestational time periods. In my individual plot I examined the relationship between number of previous pregnancies and whether or not the mother smokes. I used geom_bar with a custom theme, label and graph colouration. 
 
-__Emily Archambault__: For my individual section, I created a plot that compared a mother’s pre-pregnancy weight with the weight of her baby. I used the geom_point and geom_smooth functions, used color as an aesthetic for the points to make it easier to see, added labels for the x and y axes as well as at title, and used a theme to change the font of the text. I also made the preliminary plots that compared smoking with race and age, and wrote the recommendation section.
+__Emily Archambault__: I updated my orginal analysis of the relationship between a mother's pre-pregnancy weight and birth weight using the new tool of a linear model.
 
 __Kaiyuan Fan__: For my individual part, I make a plot shows the number of people who is premature or full term in different weight of birth. We can find from the plot, the weight of people who is full term is mostly between 80 to 125. However, the weight of people who is premature is mostly between 95 to 150. Hence, we can conclude that premature will influence birth weight, and premature people will have less weight than people who have full term to born.
 
