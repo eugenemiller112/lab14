@@ -96,6 +96,50 @@ ggplot(subset(babies,Premature!="NA" & smoke != "NA"), aes(smoke))  +
 
 ```
 
+Statistics:
+
+Null hypothesis: there is no difference in premature birth rate between smoking and nonsmoking mothers. 
+
+```{r, message = F, warning = F}
+data_babies <- babies %>% 
+  filter(Premature!="NA" & smoke != "NA")
+
+smoke_babies <- data_babies %>% 
+  filter(smoke==1)
+nosmoke_babies <- data_babies %>% 
+  filter(smoke==0)
+
+smoke_mean <- mean(smoke_babies$Premature)
+nosmoke_mean <- mean(nosmoke_babies$Premature)
+
+mu_prem <- smoke_mean - nosmoke_mean
+
+perm_mean <- function(perms = 1000, all_values, n_A)
+{
+  mu_vec <- numeric(perms)
+
+  for (i in c(1:perms))
+  {
+    
+    shuffle <- sample(all_values)
+    
+    r_A <- shuffle[1:n_A]
+    r_B <- shuffle[(n_A+1):length(all_values)]
+    
+    delta_mu <- mean(r_A) - mean(r_B)
+    
+    mu_vec[i] <- delta_mu
+  }
+  
+  return(mu_vec)
+}
+
+perm_babies <- perm_mean(1000, data_babies$Premature, 484)
+
+p_babies <- 1 - sum(perm_babies < mu_prem)/1000
+```
+
+The p value of `r p_babies` indicates that we should reject the null hypothesis and instead conclude that there is a difference between premature birth rate in smoking and nonsmoking mothers. 
 
 Question 2:
 
@@ -133,6 +177,8 @@ Our data supports the assertions of the original Surgeon General. There is a cle
 ### Eugene Miller
 Subquestion: Is there a relation between parity (number of mother's previous pregnancies) and smoking status?
 
+This question is important because it could help us determing whether smoking generally results in a higher risk of failed pregnancy.
+
 (Old Section)
 ```{r, message = FALSE, warning = FALSE, fig.align='center'}
 ggplot(subset(babies, Premature != "NA" & smoke != "NA")) + 
@@ -143,10 +189,9 @@ ggplot(subset(babies, Premature != "NA" & smoke != "NA")) +
   scale_fill_brewer(palette = 3)
 ```
 
-This shows that amongst both full term and premature births, smoking is correlated with a higher average number of previous pregnancies that the mother has had. This suggests that smoking increases the chance of a failed pregnancy; a pregnancy that results in the fetus dying before it is born. Therefore, as smoking is correlated with a higher preportion of failed pregnancies, we recommend to try to reduce the amount of smoking in order to reduce the number of failed pregnancies, which places stress of mothers who are trying to concieve a child.
 
 (New Section)
-Using permutation testing, I will show there is no statistical difference between smoking and nonsmoking mothers in terms of parity (previous number of pregnancies).
+Statistics:
 
 Null hypothesis: there is no difference between number of parities between nonsmoking and smoking mothers.
 
