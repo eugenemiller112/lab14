@@ -17,12 +17,13 @@ prem.labs <- c("Full Term", "Premature")
 names(prem.labs) <- c("0", "1")
 ```
 
-
 ---
 
 ### Two Main Questions
 
 Do mothers who smoke have increased rates of premature delivery (before 270 days)?
+
+Do the newborns of mothers who smoke have smaller birth weights at every gestational age (number of days into pregnancy when child is born)?
 
 --- 
 
@@ -33,6 +34,7 @@ Analyzing how a mother's smoking habits affect their child's birth timing and we
 ---
 
 ## Team Plot
+Question 1:
 ```{r, message = FALSE, warning=FALSE}
 ggplot(subset(babies,Premature!="NA" & smoke != "NA"), aes(smoke))  +
   geom_bar(aes(fill = Premature == 1), width=0.5)+
@@ -87,7 +89,20 @@ p_babies <- 1 - sum(perm_babies < mu_prem)/1000
 
 The p value of `r p_babies` indicates that we should reject the null hypothesis and instead conclude that there is a difference between premature birth rate in smoking and nonsmoking mothers. 
 
+Question 2:
 
+```{r, message = FALSE, warning = FALSE, fig.align='center'}
+ggplot(subset(babies, smoke != "NA")) +
+  geom_jitter(mapping = aes(y = bwtoz, x = gestation)) +
+  geom_smooth(mapping = aes(y = bwtoz, x = gestation, color = smoke == 1), method = lm, se = FALSE) +
+  coord_cartesian(xlim = c(200,300))+
+  labs(y = "Weight (oz)", x = "Gestation Period (Days)", title = "Comparison of Baby Weight Distribution Between Smoking and Nonsmoking Mothers", color = "") +
+  theme(text = element_text(hjust = 0.5, size = 9.5), plot.title = element_text(hjust = 0.5, size = 9.5)) +
+  scale_color_discrete(name="",
+                        breaks=c("FALSE", "TRUE"),
+                        labels=c("Nonsmoking", "Smoking"))
+```
+---
 
 ## Conclusions
 
@@ -96,6 +111,7 @@ Our conclusion this time matched with our results when we initially did the lab 
 
 Do the newborns of mothers who smoke have smaller birth weights at every gestational age (number of days into pregnancy when child is born)?
 
+---
 
 ## Individual Sections
 
@@ -187,6 +203,13 @@ By fitting a linear model to the data, it mostly supports my initial analysis be
 
 
 ### Kaiyuan Fan
+
+Subquestion:
+Is premature influence the birth weigth of baby or any relationship between them?
+
+This question is important because it will help mother to make a decision whether they want to premature or not in the future. I think it will be helpful.
+Old section:
+
 ```{r, message = FALSE, warning=FALSE}
 ggplot(subset(babies,Premature!="NA"), aes(bwtoz))+ 
   geom_bar(aes(fill=Premature==1))+
@@ -197,14 +220,31 @@ ggplot(subset(babies,Premature!="NA"), aes(bwtoz))+
 
 Findings: My plot shows the number of people who is premature or full term in different weight of birth. We can find from the plot, the weight of people who is full term is mostly between 80 to 125. However, the weight of people who is premature is mostly between 95 to 150. Hence, we can conclude that premature will influence birth weight, and premature people will have less weight than people who have full term to born.
 
+New section:
+```{r, message = FALSE, warning=FALSE, fig.align='center'}
+library(tidyverse)
+library(splines)
+library(modelr)
+library(tidyverse)
 
+mod1 <- lm( bwtoz ~ Premature, data = babies)
+grid <- babies %>% 
+  data_grid(Premature) %>% 
+  add_predictions(mod1)
+
+ggplot(babies, aes(Premature,bwtoz)) + 
+  geom_point()+
+  labs(x = "Premature", y = "Birth weight of baby(oz)", title = "Distribution of Premature Births with Premature or Full Term")+
+  scale_x_discrete(limits=c("Full term", "Premature"))
+```
+New graph make it explicitly showing the premature has influence on the birth weight of babies.
 
 ### Johnny Tamanaha
 Subquestion: Is birth weight affected by weather or not a mother has a college degree?
 
 This question is important because knowing a correlation between mother's education and birth weight could add to the importance of school for everyone.
 
-```{r}
+```{r, message = FALSE, warning=FALSE, fig.align='center'}
 ggplot(subset(babies, med!="NA")) +
   geom_boxplot(mapping=aes(x=med==1, y=bwtoz, fill=med==1), outlier.color="Red", outlier.shape=1) +
   labs(title="Distribution of Premature Births for Mothers With vs W/O a College Degree") +
@@ -241,6 +281,9 @@ I used the linear model function and data_grid to show the points on the graph.
 Findings: My graph shows no significant correlation between mother's education and baby birth weight, but it does show a consistent difference between non-smokers and smokers for baby birth weight in each education category. 
 
 ### Jingzhi Zhang
+(Old Section)
+Subquestion: Does the smoking status have effects on birth weights at every gestational age (number of days into pregnancy when child is born)?
+
 ```{r, echo=FALSE, messgae=FALSE, error=TRUE,warning=FALSE,fig.align='center'}
 smoker.labs <- c("never","smokes now","until preg","once did, not now")
 names(smoker.labs) <- c("0","1","2","3")
@@ -253,6 +296,32 @@ ggplot(data = babies, aes(x= gestation, y=bwtoz,color=smoke))+
 ```
 This graph shows that in the same level of birth weight in ounce, smokers have shorter length of gestation in days than nonsokers; at the same length of gestation days, babies whose mother smokes now have smaller weight than babies whose mother never smoke, which means that smoking affects the birth weights at every gestation age. Thus, as smoking is correlated with lower birth weight at every gestation age, I suggest all of the expctant should quit smoking in order to have a healthy baby.
 
+(New Section)
+
+```{r, message = F, warning = F}
+library(ggplot2) # Load the librarie (you have to do this one on each new session)
+library(magrittr)
+library(modelr)
+mod1 <- lm(bwtoz ~ gestation + smoke, data = babies)
+mod2 <- lm(bwtoz ~ gestation * smoke, data = babies)
+
+grid <- babies %>% 
+  data_grid(gestation, smoke) %>% 
+  gather_predictions(mod1, mod2)
+
+ggplot(babies, aes(gestation, bwtoz, colour = smoke)) + 
+  geom_point() + 
+  geom_line(data = grid, aes(y = pred)) + 
+  facet_wrap(~ model)
+
+babies <- babies %>% 
+  gather_residuals(mod1, mod2)
+
+ggplot(babies, aes(gestation, resid, colour = smoke)) + 
+  geom_point() + 
+  facet_grid(model ~ smoke)
+```
+I use interactions to model the effect of smoke status on birth weights at every gestational age. It mostly supports my initial analysis because the trend looks similar. I use two models to fit this data, and there is no clear difference.
 ---
 
 ## Individual Contribution Summaries
@@ -267,4 +336,3 @@ __Kaiyuan Fan__: For my individual part, I make a plot shows the number of peopl
 __Johnny Tamanaha__: I did the plot for baby birthweight separated by mother's education.
 
 __Jngzhi Zhang__: For my individual part, I made a plot that shows the correlation of length of gestation in days and babies birth weight in ounces with smoker and nonsmoker. I used the geom_point, geom_smooth functions and facet_grid functions, and also use color to make points easier to see. I added labels for x and y axes as well as the title. I also used labs to substituted origenal labels of smoke. I also created the plot answering question one, and wrote the conclusions section.
-
