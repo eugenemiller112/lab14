@@ -19,13 +19,13 @@ names(prem.labs) <- c("0", "1")
 
 ---
 
-### Two Main Questions
+### Main Question
 
 Do mothers who smoke have increased rates of premature delivery (before 270 days)?
 
 --- 
 
-## Overall Questions, why they are important, and why those reasons are important.
+## Overall Question, why it is important.
 
 Analyzing how a mother's smoking habits affect their child's birth timing and weight is important because having that knowledge would help people make better decisions for the health of the next generation. Not only would this help lawmakers take action or doctors spread awareness about the health risks of smoking for pregnant women, but it would help pregnant women be informed about the risks that smoking has on their children. 
 
@@ -308,7 +308,7 @@ I use interactions to model the effect of smoke status on birth weights at every
 ## Individual Contribution Summaries
 
 
-__Eugene Miller__ : I created the plot answering question 2, and plots correlating income and premature births between smoker and non smokers. In the team plot I used a combination of geom_point and geom_smooth to show the differences between birth weight of smoking and nonsmoing children, across all gestational time periods. In my individual plot I examined the relationship between number of previous pregnancies and whether or not the mother smokes. I used geom_bar with a custom theme, label and graph colouration. 
+__Eugene Miller__ : I added some statistics to our team question, and used permutation testing on my individual section. 
 
 __Emily Archambault__: I updated my orginal analysis of the relationship between a mother's pre-pregnancy weight and birth weight using the new tool of a linear model.
 
