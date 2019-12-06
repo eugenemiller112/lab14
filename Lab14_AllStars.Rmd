@@ -7,6 +7,7 @@ output: html_document
 
 ```{r, setup, echo = FALSE, message = FALSE, warning = FALSE}
 library(tidyverse)
+library(modelr)
 babies <- read_csv("https://raw.githubusercontent.com/ervance1/Sp2018-Data-Science-repo/master/babies2a.dat")
 babies <- rename(babies, bwtoz = `bwt/oz`) #renaming `bwt/oz` because the "/" sign requires special care
 
